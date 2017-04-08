@@ -1,0 +1,105 @@
+body {
+	font-weight: 400;
+}
+
+.no-display {
+	display: none !important;
+}
+
+.container {
+	margin-top: 15px;
+}
+
+.full {
+	width: 100%;
+}
+
+img {
+	.img-responsive();
+}
+
+.clear {
+	clear: both;
+}
+
+.wide {
+	line-height: 250%;
+}
+
+.full {
+	width: 100%;
+}
+
+.top_spacer {
+	margin-top: 20px;
+}
+
+.bottom_spacer {
+	margin-bottom: 20px;
+}
+
+.big {
+	font-size: @text_bigger;
+	margin-top: 25px;
+}
+
+i.green {
+	color: #39c502;
+}
+
+i.red {
+	color: #f00020;
+}
+
+
+/* Import xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+@import "content.less";
+@import "login.less";
+@import "menu.less";
+@import "panels.less";
+@import "user.less";
+@import "notifications.less";
+@import "phk.less";
+
+
+
+/* MEDIA xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+@media (max-width: 1300px) {
+
+}
+
+@media (max-width:@screen-sm) {
+
+	.optionlist {
+		.list_icons {
+			float: none!important;
+			margin-top: 10px;
+			a {
+				padding-left: 0px;
+				padding-right: 30px;
+			}
+		}
+
+	}
+
+}
+
+/* Forms */
+
+.has-error {
+	p, span {
+		color: @brand-danger;
+	}
+}
+
+.has-success {
+	p, span {
+		color: @brand-success;
+	}
+}
+
+.clickable {
+	cursor: pointer;
+	cursor: hand;
+}

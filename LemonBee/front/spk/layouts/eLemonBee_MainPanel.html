@@ -1,0 +1,18 @@
+
+<div class="menu_main">
+	<div ab-repeat="eFields.panels:panel" class="col-sm-6 {{panel.class}}">
+		<h2>
+			<a class="btn btn-primary full" href="{{panel.uri}}">
+				{{panel.title}}
+			</a>
+		</h2>
+		<div ab-repeat="panel.menu:subpanel"
+				class="menu_item {{subpanel.class}}">
+			<a href="{{subpanel.uri}}" class="btn btn-primary full">
+				<i class="fa {{subpanel.faIcon}}"></i><br />
+				{{subpanel.title}}
+			</a>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>

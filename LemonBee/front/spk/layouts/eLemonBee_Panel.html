@@ -1,0 +1,22 @@
+
+<div class="col-sm-6 sub_header">
+	<h4>
+		<img ab-show="image" alt="title" src="{{image}}" />
+		<i ab-hide="image" class="fa {{faIcon}}"></i>
+		{{title}}
+	</h4>
+</div>
+
+<div ab-show="showBackButton" class="col-xs-12 col-sm-3 pull-right back_button">
+	<a ab-elem="back" class="btn btn-primary full" href="">
+		{{eText('LemonBee:back')}}
+		<i class="fa fa-arrow-left"> </i>
+	</a>
+</div>
+<div class="clear"></div>
+
+<div style="position: relative">
+    <div ab-holder="content"></div>
+</div>
+
+<div ab-holder="notifications"></div>
