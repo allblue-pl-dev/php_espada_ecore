@@ -80,7 +80,7 @@ class MSPK extends E\Module
     public function addScript($path)
     {
         if ($path !== null) {
-            $file_uri = E\Package::GetFileUri_FromPath(
+            $file_uri = E\Package::Uri_FromPath(
                     $path, 'front/spk', '.js');
 
             if ($file_uri === null)

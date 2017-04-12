@@ -26,7 +26,7 @@ class CTranslations
 
 		$t_path = 'languages/' . $this->path . '.ini';
 
-		$file_path = E\Package::GetFilePath($package, $t_path);
+		$file_path = E\Package::Path($package, $t_path);
 		if ($file_path !== null)
 			$this->translations = parse_ini_file($file_path);
 	}

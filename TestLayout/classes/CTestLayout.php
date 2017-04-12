@@ -16,7 +16,7 @@ class CTestLayout
             $fields = new E\Fields();
         else {
             $fields_file_path =
-                    E\Package::GetFilePath_FromPath($fields_path, 'fields', '.json');
+                    E\Package::Path_FromPath($fields_path, 'fields', '.json');
             if ($fields_file_path === null) {
                 \E\Notice::Add("Fields path `{$fields_path}` does not exist.");
                 $fields = new E\Fields();

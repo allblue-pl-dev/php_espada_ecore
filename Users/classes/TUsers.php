@@ -21,14 +21,15 @@ class TUsers extends Database\TTable
         ]);
 
         $this->setColumnParser('Groups', [
-            function($row, $name, $value) {
+            'out' => function($row, $name, $value) {
                 $groups = explode(',', $row[$name]);
 
                 return [
                     $name => $groups,
                     $name . '_Permissions' => HPermissions::Get_FromGroups($groups)
                 ];
-            }, function($row, $name, $value) {
+            },
+            'in' => function($row, $name, $value) {
                 if (!is_array($value))
                     throw new \Exception('`groups` column must be an array.');
 

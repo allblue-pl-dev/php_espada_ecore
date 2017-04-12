@@ -342,6 +342,19 @@ class TTable
     {
         $this->checkColumns();
 
+
+        $unescaped_row = [];
+        foreach ($row as $column_name => $db_column_value) {
+            if (!$this->columnExists($column_name)) {
+                $parsed_row[$column_name] = $db_column_value;
+                continue;
+            }
+
+            $column = $this->getColumn($column_name);
+            $unescaped_row[$column_name] = $column['field']->unescape(
+                $this->db, $db_column_value);
+        }
+
         $parsed_row = [];
         foreach ($row as $column_name => $db_column_value) {
             if (!$this->columnExists($column_name)) {
@@ -350,15 +363,14 @@ class TTable
             }
 
             $column = $this->getColumn($column_name);
-            $column_value = $column['field']->unescape($this->db, $db_column_value);
 
             if (array_key_exists('parser', $column)) {
                 if (array_key_exists('out', $column['parser'])) {
                     $parsed_cols = $column['parser']['out']($row, $column_name,
-                            $column_value);
+                            $unescaped_row[$column_name]);
                     foreach ($parsed_cols as $parsed_col_name => $parsed_col_value) {
                         if ($parsed_col_name !== $column_name) {
-                            if ($this->columnExists($parsed_col_name)) {
+                            if ($this->columnExists($parsed_col_name, true)) {
                                 throw new \Exception('Cannot modify existing' .
                                         ' columns inside column parsed.');
                             }
@@ -376,7 +388,7 @@ class TTable
                 }
             }
 
-            $parsed_row[$column_name] = $column_value;
+            $parsed_row[$column_name] = $unescaped_row[$column_name];
         }
 
         return $parsed_row;
@@ -546,15 +558,15 @@ class TTable
         return $this->select($where, $group_extension);
     }
 
-    public function setColumnParser($column_name, $parser)
+    public function setColumnParser($column_name, array $parser)
     {
         $column = &$this->getColumnRef($column_name);
 
-        if (is_array($parser)) {
-            $column['parser']['out'] = $parser[0];
-            $column['parser']['in'] = $parser[1];
-        } else
-            $column['parser']['out'] = $parser;
+        if (array_key_exists('out', $parser))
+            $column['parser']['out'] = $parser['out'];
+
+        if (array_key_exists('in', $parser))
+            $column['parser']['in'] = $parser['in'];
     }
 
     public function setColumns($columns)
@@ -764,6 +776,15 @@ class TTable
             if ($key === 'OR' || $key === 'AND') {
                 $args[] = '(' . $this->getQuery_Conditions_Helper($column_condition,
                         $key, $table_only) . ')';
+                continue;
+            }  else if (count($column_condition) === 1) {
+                $logic_operator = array_keys($column_condition)[0];
+                if ($logic_operator !== 'OR' && $logic_operator !== 'AND')
+                    throw new \Exception('Unknown logic operator.');
+
+                $args[] = '(' . $this->getQuery_Conditions_Helper(
+                        $column_condition[$logic_operator], $logic_operator,
+                        $table_only) . ')';
                 continue;
             } else if (!is_int($key))
                 throw new \Exception("Unknown logic operator `{$key}`.");
