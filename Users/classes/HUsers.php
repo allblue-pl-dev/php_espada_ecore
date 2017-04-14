@@ -34,22 +34,20 @@ class HUsers
 	static public function CheckLoginAndPassword(EC\MDatabase $db, $login,
 			$password)
 	{
-		if (EDEBUG) {
-			$test_users = self::GetTestUsers();
+		$test_users = self::GetTestUsers();
+		foreach ($test_users as $test_user) {
+			if ($test_user['login'] === $login &&
+				$test_user['password'] === $password) {
 
-			foreach ($test_users as $test_user) {
-				if ($test_user['login'] === $login &&
-					$test_user['password'] === $password) {
-					$user = [];
+				$user = [];
 
-					$user['id'] = $test_user['id'];
-					$user['login'] = $login;
-					$user['groups'] = explode(',',
-							str_replace(' ', '', $test_user['groups']));
-					$user['permissions'] = HPermissions::Get_FromGroups($user['groups']);
+				$user['id'] = $test_user['id'];
+				$user['login'] = $login;
+				$user['groups'] = explode(',',
+						str_replace(' ', '', $test_user['groups']));
+				$user['permissions'] = HPermissions::Get_FromGroups($user['groups']);
 
-					return $user;
-				}
+				return $user;
 			}
 		}
 
@@ -103,10 +101,7 @@ class HUsers
 
 	static public function GetTestUsers()
 	{
-		if (EDEBUG)
-			return EC\HConfig::Get('users_TestUsers', []);
-
-		return [];
+		return EC\HConfig::Get('Users', 'testUsers', []);
 	}
 
 	//

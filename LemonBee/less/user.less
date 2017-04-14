@@ -1,22 +1,22 @@
 /* User Info */
-
-.user_info {
+.lb-user-info {
+	height: @lb-topbar-height;
 	text-align: right;
-	padding-right: 0px;
+	line-height: @lb-topbar-height;
 
-	i {
-		padding-right: 5px;
+	img {
+		display: inline;
+		max-height: @lb-topbar-height - 20px; 
+	}
+
+	a {
+		color: #fff;
 	}
 }
 
-
 /* media */
-@media (max-width:@screen-sm) {
-	.user_info {
-		text-align: left;
-		
-		i {
-			margin-left: -5px;
-		}
+@media (max-width: @screen-sm) {
+	.lb-user-info {
+		height: auto;
 	}
 }

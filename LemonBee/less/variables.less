@@ -1,38 +1,49 @@
 
 /* Bootstrap Variables Overwrites */
+@brand-primary: #28285c;
 
-@brand-primary: #00a2ff;
-@brand-success: #00a2ff;
+@grid-float-breakpoint: @screen-md; /* Controll when menu toggle appears */
+
+@font-family-sans-serif: "Source Sans Pro", Arial, sans-serif;
+@font-size-base: 16px;
 
 @gray-lightest: lighten(@gray-base, 95%);
 @gray-lighter: lighten(@gray-base, 80%);
 @gray-light: lighten(@gray-base, 60%);
 
-@state-danger-text: #ff453c;
-@state-danger-bg: #ffe2e2;
+@navbar-inverse-bg: transparent;
+@nav-link-hover-bg: red;
+@navbar-inverse-toggle-hover-bg: @lb-blue-steel-dark;
+@navbar-inverse-toggle-border-color: @gray-lighter;
+@navbar-inverse-toggle-icon-bar-bg: @gray-lighter;
 
-@text-color: @gray-light;
+/* only sharp edges */
+@border-radius-base: 0px;
+//@state-danger-bg: #d9534f;
 
-@input-border-focus: @brand-primary;
+/* colors */
+@brand-secondary: #d10f44;
+@brand-success: #27b697;
 
-@table-bg-accent: @gray-lightest;
-@table-bg-hover: @yellow_light;
+/* LemonBee Variables */
+@lb-logo-width: 200px;
+@lb-logo-height: 47px;
 
-@orange: orange;
-@green: @brand-success;
-@violet: violet;
-@red: red;
-@yellow_light: lighten(@brand-primary, 40%);
-@green_light: #deffa4;
+@lb-topbar-height: 80px;
+@lb-buttons-panel-height: 60px;
 
-@font-family-sans-serif: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-@font-size-base: 17px;
+/* colors */
+@lb-black: #191919;
+@lb-blue: #6196c5;
+@lb-blue-light: #cfecfb;
+@lb-blue-lighter: #e1f3fc;
+@lb-blue-steel: #3b4f67;
+@lb-blue-steel-dark: #314256;
+@lb-gray: #a9a9a9;
+@lb-gray-dark: #3b3b3b;
+@lb-gray-blue-dark: #2f353f;
+@lb-red: #ed1c24;
 
-@text_big: 110%;
-@text_bigger: 130%;
-@text_biggest: 150%;
-@text_huge: 200%;
-@text_giant: 300%;
-
-@logo_width: 200px;
-@logo_height: 47px;
+/* </Custom Variables Definitions> */
+/* Magda variables */
+@import "magda-variables.less";

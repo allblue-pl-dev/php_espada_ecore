@@ -20,7 +20,7 @@ class CConfig_Setter
 
     public function set(array $values)
     {
-        $this->properties = array_merge($this->properties, $values);
+        $this->properties = array_merge_recursive($this->properties, $values);
     }
 
 }

@@ -50,6 +50,12 @@ class HDate
         return gmdate(EC\HText::_('Date:format_Time'), $time);
     }
 
+    static public function Format_DayOfWeek($time)
+    {
+        $day_of_week = date('l', $time);
+        return EC\HText::_("Date:Format_DayOfWeek_{$day_of_week}");
+    }
+
     static public function GetUTCOffset()
     {
         return self::$UTCOffset;

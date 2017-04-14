@@ -636,7 +636,7 @@ class TTable
         $this->addColumnVFields($column_name, $v_fields);
     }
 
-    public function update($rows)
+    public function update($rows, $ignore_not_existing = false)
     {
         $this->checkColumns();
 
@@ -650,9 +650,12 @@ class TTable
 
         $columns = [];
         foreach ($rows[$first_key] as $col_name => $col_val) {
-            // $columns[$col_name] = $this->getColumn($col_name, true);
-            if ($this->columnExists($col_name, true))
+            if (!$ignore_not_existing) {
                 $columns[$col_name] = $this->getColumn($col_name, true);
+            } else {
+                if ($this->columnExists($col_name, true))
+                    $columns[$col_name] = $this->getColumn($col_name, true);
+            }
         }
 
         $db_values_array = [];

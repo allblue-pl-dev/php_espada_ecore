@@ -5,8 +5,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link href="<?php echo $images->favicon; ?>" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-        <link rel="apple-touch-icon" href="<?php echo $images->appleTouchIcon; ?>" />
+        <link href="<?php echo $_images['favicon']; ?>" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+        <link rel="apple-touch-icon" href="<?php echo $_images['appleTouchIcon']; ?>" />
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600&amp;subset=latin-ext" rel="stylesheet">
 
         <?php $eHolders->header; ?>
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -19,48 +20,84 @@
     <body>
         <?php $eHolders->init; ?>
 
-        <?php if ($layout === 'panel'): ?>
-            <div class="fill background_main"></div>
-          	<div class="container <?php echo $panelClass; ?>">
-                <div class="col-sm-6 logo">
-                    <a href="<?php echo E\Uri::Base(); ?>">
-                        <img src="<?php echo E\Uri::File('LemonBee:images/logo_main.png'); ?>" />
-                    </a>
-                </div>
+        <!-- Main panel -->
+        <?php if ($_layout === 'panel'): ?>
+            <!-- <div class="mg-fill-screen lb-background-main"></div>  -->
+          	<div class="lb-content <?php echo $_panelClass; ?>">
 
-                <?php $eHolders->userInfo; ?>
-          		<div class="clear"></div>
-          		<?php $eHolders->topMenu; ?>
-          		<div class="content">
-                    <div class="clear"></div>
-          			<?php $eHolders->content; ?>
+          		<!-- side menu background -->
+          		<div class="col-lg-2 col-md-3 mg-absolute lb-bg-white" style="top:0;bottom:0;left:0;right:0;"></div>
+
+          		<div class="mg-relative lb-topbar">
+	          		<!-- logo -->
+	          		<div class="col-lg-2 col-md-3 mg-bg-white">
+	          			<div class="lb-logo">
+							<a href="<?php echo E\Uri::Base(); ?>">
+		                        <img src="<?php echo E\Uri::File('LemonBee:images/logo_main.png'); ?>" alt="logo" />
+		                    </a>
+	                    </div>
+	          		</div>
+	          		<!-- user info -->
+					<div class="col-lg-10 col-md-9 bg-primary">
+	          			<?php $eHolders->userInfo; ?>
+	          		</div>
+	          		<div class="mg-clear"></div>
           		</div>
-				<div class="shadow"></div>
-              	<div class="povered_by pull-right">
+          		<!-- side menu -->
+				<div class="col-lg-2 col-md-3 mg-no-padding-horizontal">
+          			<?php $eHolders->topMenu; ?>
+          		</div>
+
+          		<!-- main content -->
+				<div class="col-lg-10 col-md-9 lb-bg-gray-lightest" style="min-height: 800px;">
+          			<?php $eHolders->content; ?>
+					<div class="backToTop mg-spacer-top">
+                        <hr />
+						<a id="backToTop" class="spScrollToTop lb-back-to-top btn btn-default" href="">
+							<?php echo EC\HText::_('LemonBee:sys.texts_backToTop'); ?>
+                                <i class="fa fa-chevron-up"></i>
+						</a>
+					</div>
+	          	</div>
+	          	<div class="mg-clear"></div>
+              	<div class="lb-povered-by pull-right bg-primary">
               		Powered by <a href="http://allblue.pl">AllBlue</a>
               	</div>
             </div>
-        <?php elseif ($layout === 'logIn'): ?>
-            <div class="fill background_login"></div>
-            <div class="col-lg-4 col-md-6 col-sm-8 login">
-            	<div class="login_content">
 
-            		<div class="login_logo  col-sm-8 col-sm-offset-2">
-            			<img src="<?php echo E\Uri::File('LemonBee:images/logo.png'); ?>" />
-            		</div>
-            		<div class="clear"></div>
-            		<?php $eHolders->content; ?>
-
-            		<div class="clear"></div>
-            	</div>
-            	<div class="shadow"></div>
-            	<div class="povered_by pull-right">
-            		Powered by <a href="https://allblue.pl">AllBlue</a>
-            	</div>
+		<!-- Log in panel -->
+        <?php elseif ($_layout === 'logIn'): ?>
+            <div class="mg-fill-screen lb-background-login"></div>
+            <div class="magda-holder">
+	            <div class="col-lg-5 col-md-6 col-sm-8 lb-login">
+	            	<div class="lb-login-content">
+	            		<div class="lb-login-logo col-md-4 col-sm-4 ">
+	            			<img src="<?php echo E\Uri::File('LemonBee:images/logo.png'); ?>" />
+                            <div class="mg-clear"></div>
+                        </div>
+                        <div class="lb-login-form col-md-8 col-sm-8">
+                            <h3>
+                                <?php echo EC\HText::_('LemonBee:sys.texts_logInMessage'); ?>
+                            </h3>
+                            <?php $eHolders->content; ?>
+                        </div>
+                        <div class="mg-clear"></div>
+	            	</div>
+	            	<div class="lb-povered-by">
+	            		Powered by <a href="https://allblue.pl">AllBlue</a>
+	            	</div>
+	            </div>
             </div>
         <?php else: ?>
             Unknown layout.
         <?php endif; ?>
+
+        <script type="text/javascript">
+            $('#backToTop').click(function(evt) {
+                $('html,body').animate({ scrollTop: 0 }, 'fast');
+                return false;
+            });
+        </script>
 
         <?php $eHolders->debug; ?>
     </body>

@@ -1,1 +1,1 @@
-<div id="<?php echo $elemId; ?>"></div>
+<div id="<?php echo $_elemId; ?>"></div>

@@ -11,14 +11,12 @@ class SApi extends E\Site
     private $actionName = '';
 
     private $api = null;
-    private $fields = null;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->fields = new E\Fields(['raw' => '']);
-        $this->setRootL(E\Layout::_('Basic:raw', $this->fields));
+        $this->setRootL(E\Layout::_('Basic:raw'));
 
         $this->parseArgs(E\Args::Uri('_extra'));
     }
@@ -36,7 +34,9 @@ class SApi extends E\Site
 
         $result_json = $result->getJSON();
 
-        $this->fields->raw = $result->getJSON();
+        $this->getRootL()->setFields([
+            'raw' => $result->getJSON()
+        ]);
     }
 
     private function parseArgs($args)

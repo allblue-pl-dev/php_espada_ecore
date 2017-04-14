@@ -50,44 +50,43 @@ class HStrings
         return $chars;
     }
 
-    static public function EscapeLangCharacters($str, $langs = [])
+    static public function EscapeLangCharacters($string, $langs = [])
     {
         $replace_from   = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż',
                            'Ą', 'Ć', 'Ę', 'Ł', 'Ń', 'Ó', 'Ś', 'Ź', 'Ż'];
         $replace_to     = ['a', 'c', 'e', 'l', 'n', 'o', 's', 'z', 'z',
                            'A', 'C', 'E', 'L', 'N', 'O', 'S', 'Z', 'Z'];
 
-        return str_replace($replace_from, $replace_to, $str);
+        return str_replace($replace_from, $replace_to, $string);
     }
 
-    static public function EscapeRegexpChars($str)
+    static public function EscapeRegexpChars($string)
     {
         $replace_from = [ '\\', '^', '$', '.', '[' .']', '|', '(' .
                 ')', '?', '*', '+', '{', '}', '-', '#' ];
         $replace_to = [ '\\\\', '\\^', '\\$', '\\.', '\\[' .'\\]', '\\|', '\\(' .
                 '\\)', '\\?', '\\*', '\\+', '\\{', '\\}', '\\-', '\\#' ];
 
-        return str_replace($replace_from, $replace_to, $str);
+        return str_replace($replace_from, $replace_to, $string);
     }
 
-    static public function RemoveCharacters($stri, $chars,
-            $allowed = true)
+    static public function RemoveCharacters($string, $allowed_characters)
     {
         $new_str = '';
-        for ($i = 0; $i < mb_strlen($str); $i++) {
-            if (mb_strpos($chars, $str[$i]))
-                $new_str .= $str[$i];
+        for ($i = 0; $i < mb_strlen($string); $i++) {
+            if (mb_strpos($allowed_characters, $string[$i]))
+                $new_str .= $string[$i];
         }
 
         return $new_str;
     }
 
-    static public function StripDoubles($str, $doubles)
+    static public function RemoveDoubles($string, $char)
     {
         while (true) {
-            $str = str_replace('--', '-', $str, $count);
+            $string = str_replace($char.$char, $char, $string, $count);
             if ($count === 0)
-                return $str;
+                return $string;
         }
     }
 

@@ -9,7 +9,7 @@ class HPermissions
     static public function Get_FromGroups($groups)
     {
         $permissions = [];
-        $config_groups = EC\HConfig::Get('users_Groups', []);
+        $config_groups = EC\HConfig::Get('Users', 'groups', []);
 
         foreach ($groups as $group_name) {
             if (!array_key_exists($group_name, $config_groups))

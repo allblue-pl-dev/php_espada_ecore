@@ -114,7 +114,8 @@ class AUser extends EC\Api\ABasic
 		foreach ($this->requiredPermissions as $permission) {
 			if (!in_array($permission, $user_permissions)) {
 				return EC\Api\CResult::Failure('`login` and `password`' .
-										  ' do not match.`');
+										  ' do not match.`')
+                    ->debug('Permission denied.');
 			}
 		}
 
