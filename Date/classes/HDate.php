@@ -92,4 +92,9 @@ class HDate
         return strtotime($str . ' UTC');
     }
 
+    static public function Time()
+    {
+        return time() + self::GetUTCOffset();
+    }
+
 }
