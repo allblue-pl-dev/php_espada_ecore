@@ -12,11 +12,11 @@
 			</div>
 			<div class="navbar-collapse collapse mg-no-padding-horizontal">
 				<ul class="nav nav-pills nav-stacked">
-				<?php foreach ($menuItems as $item): ?>
-				  <li class="<?php echo $item->active ? 'active' : ''; ?>">
-					<a href="<?php echo $item->uri; ?>">
-						<img src="<?php echo $item->image; ?>" alt="<?php echo $item->title; ?>" />
-			            <?php echo $item->title; ?>&nbsp;
+				<?php foreach ($_menuItems as $item): ?>
+				  <li class="<?php echo $item['active'] ? 'active' : ''; ?>">
+					<a href="<?php echo $item['uri']; ?>">
+						<img src="<?php echo $item['image']; ?>" alt="<?php echo $item['title']; ?>" />
+			            <?php echo $item['title']; ?>&nbsp;
 			        </a>
 				  </li>
 				<?php endforeach; ?>
