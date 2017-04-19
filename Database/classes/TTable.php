@@ -78,7 +78,7 @@ class TTable
 
             $column = &$this->getColumnRef($column_name);
 
-            $column['parser'] = $ref_column['vFields'];
+            $column['parser'] = $ref_column['parser'];
             $column['vFields'] = $ref_column['vFields'];
         }
     }
