@@ -342,7 +342,6 @@ class TTable
     {
         $this->checkColumns();
 
-
         $unescaped_row = [];
         foreach ($row as $column_name => $db_column_value) {
             if (!$this->columnExists($column_name)) {
@@ -366,13 +365,19 @@ class TTable
 
             if (array_key_exists('parser', $column)) {
                 if (array_key_exists('out', $column['parser'])) {
-                    $parsed_cols = $column['parser']['out']($row, $column_name,
-                            $unescaped_row[$column_name]);
+                    $parsed_cols = $column['parser']['out']($this, $row,
+                            $column_name, $unescaped_row[$column_name]);
                     foreach ($parsed_cols as $parsed_col_name => $parsed_col_value) {
                         if ($parsed_col_name !== $column_name) {
                             if ($this->columnExists($parsed_col_name, true)) {
                                 throw new \Exception('Cannot modify existing' .
                                         ' columns inside column parsed.');
+                            }
+
+                            if (!$this->columnExists($parsed_col_name, false)) {
+                                throw new \Exception('Cannot modify undeclared ' .
+                                        "column `{$parsed_col_name}` in `" .
+                                        get_called_class() .  '`.');
                             }
                         }
 
@@ -678,7 +683,7 @@ class TTable
                             "`{$col_name}` in rows.");
 
                 if (array_key_exists('in', $columns[$col_name]['parser'])) {
-                    $col_val = $columns[$col_name]['parser']['in']($row,
+                    $col_val = $columns[$col_name]['parser']['in']($this, $row,
                             $col_name, $col_val);
                 }
 

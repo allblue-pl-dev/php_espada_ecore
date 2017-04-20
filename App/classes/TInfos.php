@@ -33,7 +33,7 @@ class TInfos extends EC\Database\TTable
                     $name => json_decode($value, true)['TablesIds']
                 ];
             },
-            function($row, $name, $value) {
+            function($table, $row, $name, $value) {
                 return json_encode([ 'TablesIds' => $value ]);
             }
         ]);
