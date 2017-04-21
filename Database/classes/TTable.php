@@ -786,12 +786,12 @@ class TTable
                         $key, $table_only) . ')';
                 continue;
             }  else if (count($column_condition) === 1) {
-                $logic_operator = array_keys($column_condition)[0];
-                if ($logic_operator !== 'OR' && $logic_operator !== 'AND')
+                $t_logic_operator = array_keys($column_condition)[0];
+                if ($t_logic_operator !== 'OR' && $t_logic_operator !== 'AND')
                     throw new \Exception('Unknown logic operator.');
 
                 $args[] = '(' . $this->getQuery_Conditions_Helper(
-                        $column_condition[$logic_operator], $logic_operator,
+                        $column_condition[$t_logic_operator], $t_logic_operator,
                         $table_only) . ')';
                 continue;
             } else if (!is_int($key))
