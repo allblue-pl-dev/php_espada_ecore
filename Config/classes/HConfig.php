@@ -45,7 +45,7 @@ class HConfig
 
     static private function RequireConfigFile()
 	{
-		if (!file_exists(PATH_DATA . '/config/Config.php'))
+		if (!file_exists(PATH_DATA . '/Config/config.php'))
 			throw new \Exception('Config file `'.$file_path.'` does not exist.');
 
 		$eConfig = new CConfig_Setter();
