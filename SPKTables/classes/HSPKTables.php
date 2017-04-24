@@ -273,15 +273,13 @@ class HSPKTables
     {
         $spk_table = self::ParseInfo($spk_table);
 
-        if (!isset($table_args['offset']) || !isset($table_args['limit'])) {
-            return [
-                'offset' => 0,
-                'limit' => 100
-            ];
-        }
+        $offset = '0';
+        $limit = '18446744073709551615';
 
-        $offset = intval($table_args['offset']);
-        $limit = intval($table_args['limit']);
+        if (isset($table_args['offset']))
+            $offset = intval($table_args['offset']);
+        if (isset($table_args['limit']))
+            $limit = intval($table_args['limit']);
 
         return  [
             'offset' => $offset,
