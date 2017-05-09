@@ -11,6 +11,7 @@ class TUsers extends Database\TTable
     {
         parent::__construct($db, 'Users_Users', 'uu');
 
+        /* Columns - Table */
         $this->addColumns([
             'Id'            => new Database\FInt(true, 11),
             'LoginHash'     => new Database\FVarchar(true, 256),
@@ -18,6 +19,10 @@ class TUsers extends Database\TTable
             'PasswordHash'  => new Database\FVarchar(true, 256),
             'Groups'        => new Database\FVarchar(true, 128),
             'Active'        => new Database\FBool(true)
+        ]);
+        /* Columns - Extra */
+        $this->addColumns_Extra([
+            'Groups_Permissions' => [ null, null ]
         ]);
 
         $this->setColumnParser('Groups', [

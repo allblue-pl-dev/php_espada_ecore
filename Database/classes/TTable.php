@@ -837,6 +837,7 @@ class TTable
             $column_field = $column_info[1];
         }
 
+        $v_field = $column_field === null ? null : $column_field->getVField();
         $column = [
             'name' => $column_name,
             'optional' => $optional,
@@ -844,7 +845,7 @@ class TTable
             'field' => $column_field,
 
             'parser' => [],
-            'vFields' => [ $column_field->getVField() ]
+            'vFields' => [ $v_field ]
         ];
 
         return $column;
