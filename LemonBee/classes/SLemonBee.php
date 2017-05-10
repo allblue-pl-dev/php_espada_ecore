@@ -212,6 +212,24 @@ class SLemonBee extends EC\SBasic
             if (!$this->m->user->hasPermission($required_permission))
                 \Espada::Redirect($this->uris['logIn']);
         }
+
+        /* SPK Notifications */
+        $images_json = json_encode([
+            'loading' => E\Uri::File('LemonBee:images/notifications/loading.gif'),
+            'success' => E\Uri::File('LemonBee:images/notifications/message-success.png'),
+            'failure' => E\Uri::File('LemonBee:images/notifications/message-failure.png')
+        ]);
+
+        // $utc_time = new \DateTime('now', new \DateTimeZone('UTC'));
+        // $timezone = new \DateTimeZone('Europe/Warsaw');
+        // $timezone_offset = $timezone->getOffset($utc_time) / 60 / 60;
+
+        $this->m->spk->addAppScript(
+            "SPK.\$abNotifications.SetImages({$images_json});" .
+            "SPK.\$abDate.utcOffset = 0;" .
+
+            "SPK.\$eLang.tag = 'pl-PL';"
+        ); 
     }
 
     private function _initialize_CheckUris()
