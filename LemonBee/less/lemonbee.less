@@ -1,4 +1,4 @@
-/* COMMON */
+/* Common LemonBee Styles */
 /* back to top */
 .lb-back-to-top {
 	margin-bottom: 15px;
@@ -135,8 +135,11 @@ h1, h2 {
 .lb-header {
 	.mg-spacer-top-s();
 	h2 {
-		font-size: 24px;
+		font-size: 26px;
 		margin: 0px;
+		.btn {
+			margin-top: -5px;
+		}
 	}
 }
 
@@ -155,6 +158,10 @@ label {
 	margin-bottom: 0px;
 }
 
+.nav-pills > li > a {
+	border-radius: 0px;
+}
+
 .nav > li > a:hover, .nav > li > a:focus {
 	background-color: @gray-lightest;
 }
@@ -164,6 +171,14 @@ label {
 	color: @brand-primary;
 }
 
+/* previews */
+.lb-preview-image {
+	margin-bottom: 20px;
+	img {
+		max-width: 200px;
+		max-height: 200px;
+	}
+}
 
 /* search */
 .search {
