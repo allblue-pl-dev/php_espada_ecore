@@ -21,7 +21,7 @@ class HImages
     }
 
     static public function Scale_ToMinSize($file_path, $dest_file_path,
-            $min_width, $min_height)
+            $min_width, $min_height, $quality = 75)
     {
         $memory_limit = ini_get('memory_limit');
         ini_set('memory_limit', '128M');
@@ -42,7 +42,7 @@ class HImages
                 $factor * $image_height);
         imagedestroy($image);
 
-        $result = imagejpeg($scaled_image, $dest_file_path);
+        $result = imagejpeg($scaled_image, $dest_file_path, $quality);
 
         imagedestroy($scaled_image);
 
