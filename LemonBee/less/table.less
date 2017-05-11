@@ -23,13 +23,19 @@ table {
 }
 
 /* calnedar */
-.datetimepicker {
+.input-group {
 	table {
 		th {
-			background-color: red!important;
-			td {
-				border-radius: 0px;
-			}
+			border-radius: 0px;
+		}
+		th:hover {
+			background-color: darken(@brand-secondary, 5%)!important;
+		}
+		td.active {
+			background-color: @brand-primary;
+		}
+		td.active:hover {
+			background-color: darken(@brand-primary, 10%);
 		}
 	}
 }

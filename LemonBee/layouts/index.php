@@ -26,11 +26,11 @@
           	<div class="lb-content <?php echo $_panelClass; ?>">
 
           		<!-- side menu background -->
-          		<div class="col-lg-2 col-md-3 mg-absolute lb-bg-white" style="top:0;bottom:0;left:0;right:0;"></div>
+          		<div class="col-lg-2 col-sm-3 mg-absolute lb-bg-white" style="top:0;bottom:0;left:0;right:0;"></div>
 
           		<div class="mg-relative lb-topbar">
 	          		<!-- logo -->
-	          		<div class="col-lg-2 col-md-3 mg-bg-white">
+	          		<div class="col-lg-2 col-sm-3 mg-bg-white">
 	          			<div class="lb-logo">
 							<a href="<?php echo E\Uri::Base(); ?>">
 		                        <img src="<?php echo E\Uri::File('LemonBee:images/logo_main.png'); ?>" alt="logo" />
@@ -38,18 +38,18 @@
 	                    </div>
 	          		</div>
 	          		<!-- user info -->
-					<div class="col-lg-10 col-md-9 bg-primary">
+					<div class="col-lg-10 col-sm-9 bg-primary">
 	          			<?php $eHolders->userInfo; ?>
 	          		</div>
 	          		<div class="mg-clear"></div>
           		</div>
           		<!-- side menu -->
-				<div class="col-lg-2 col-md-3 mg-no-padding-horizontal">
+				<div class="col-lg-2 col-sm-3 mg-no-padding-horizontal">
           			<?php $eHolders->topMenu; ?>
           		</div>
 
           		<!-- main content -->
-				<div class="col-lg-10 col-md-9 lb-bg-gray-lightest" style="min-height: 800px;">
+				<div class="col-lg-10 col-sm-9 lb-bg-gray-lightest" style="min-height: 800px;">
           			<?php $eHolders->content; ?>
 					<div class="backToTop mg-spacer-top">
                         <hr />
@@ -69,13 +69,13 @@
         <?php elseif ($_layout === 'logIn'): ?>
             <div class="mg-fill-screen lb-background-login"></div>
             <div class="magda-holder">
-	            <div class="col-lg-5 col-md-6 col-sm-8 lb-login">
+	            <div class="col-lg-5 col-sm-6 col-sm-8 lb-login">
 	            	<div class="lb-login-content">
-	            		<div class="lb-login-logo col-md-4 col-sm-4 ">
+	            		<div class="lb-login-logo col-sm-4 col-sm-4 ">
 	            			<img src="<?php echo E\Uri::File('LemonBee:images/logo.png'); ?>" />
                             <div class="mg-clear"></div>
                         </div>
-                        <div class="lb-login-form col-md-8 col-sm-8">
+                        <div class="lb-login-form col-sm-8 col-sm-8">
                             <h3>
                                 <?php echo EC\HText::_('LemonBee:sys.texts_logInMessage'); ?>
                             </h3>
