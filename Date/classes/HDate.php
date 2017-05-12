@@ -52,7 +52,7 @@ class HDate
 
     static public function Format_DayOfWeek($time)
     {
-        $day_of_week = date('l', $time);
+        $day_of_week = gmdate('l', $time);
         return EC\HText::_("Date:format_DayOfWeek_{$day_of_week}");
     }
 
