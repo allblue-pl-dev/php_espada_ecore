@@ -155,24 +155,16 @@ class HUsers
 	// 		return $id;
     // }
 
-	static public function Exists(EC\MDatabase $db, $login, $email,
-			$excluded_id, &$exists = [])
-	{
+	static public function Exists(EC\MDatabase $db, $login, $excluded_ids = [ -1 ]) {
 		$login_hash = self::GetLoginHash($login);
-		$email_hash = self::GetPasswordHash($email);
 
 		$row = (new TUsers($db))->row_Where([
-			'OR' => [
-				[ 'LoginHash', '=', $login_hash ],
-				[ 'EmailHash', '=', $email_hash ]
-			]
-		], '', true);
+			[ 'Id', 'NOT IN', $excluded_ids ],
+			[ 'LoginHash', '=', $login_hash ],
+		]);
 
 		if ($row === null)
 			return false;
-
-		$exists['Login'] = $row['LoginHash'] === $login_hash;
-		$exists['Email'] = $row['EmailHash'] === $email_hash;
 
 		return true;
 	}
