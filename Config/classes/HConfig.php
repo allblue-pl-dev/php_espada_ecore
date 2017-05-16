@@ -43,6 +43,27 @@ class HConfig
         self::RequireConfigFile(self::$Properties);
     }
 
+
+    // static private function GetPropertyValue($property_array, $property_name,
+    //         $required, $default_value = null)
+    // {
+    //     $property_name_array = explode('.', $property_name);
+    //     $value = $property_array;
+    //     foreach ($property_name_array as $property_name_part) {
+    //         if (!array_key_exists($property_array, $property_name)) {
+    //             if ($required) {
+    //                 throw new \Exception("Config property `{$package_name}.{$property_name}`" .
+    //                         " not set.");
+    //             } else
+    //                 return $default_value;
+    //         }
+    //
+    //         $value = $value[$property_name_part];
+    //     }
+    //
+    //     return $value;
+    // }
+
     static private function RequireConfigFile()
 	{
 		if (!file_exists(PATH_DATA . '/Config/config.php'))

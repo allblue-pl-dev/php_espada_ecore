@@ -70,11 +70,11 @@ class HStrings
         return str_replace($replace_from, $replace_to, $string);
     }
 
-    static public function RemoveCharacters($string, $allowed_characters)
+    static public function RemoveCharacters($string, $allowed_characters_string)
     {
         $new_str = '';
         for ($i = 0; $i < mb_strlen($string); $i++) {
-            if (mb_strpos($allowed_characters, $string[$i]))
+            if (mb_strpos($allowed_characters_string, $string[$i]))
                 $new_str .= $string[$i];
         }
 
