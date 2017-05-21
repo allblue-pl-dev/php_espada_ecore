@@ -136,7 +136,7 @@ class MSPK extends E\Module
         $base = E\Uri::Page(null, $uri_args);
         $html .= ".base('{$base}')";
 
-        $html .= ".layoutsInfo('{$layouts_uri}')";
+        $html .= ".layoutsInfo('{$layouts_uri}', '" . SITE_BASE . "')";
 
         foreach ($this->pages as $page) {
             $html .= ".page('{$page['name']}', '{$page['alias']}',
