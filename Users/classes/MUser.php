@@ -38,6 +38,15 @@ class MUser extends E\Module
 		return $this->permissions;
 	}
 
+	public function getPermissions_Default()
+	{
+		$groups = EC\HConfig::GetRequired('Users', 'groups');
+		if (array_key_exists('_default', $groups))
+			return $groups['_default'];
+
+		return [];
+	}
+
 	public function hasPermission($permission)
 	{
 		return in_array($permission, $this->permissions);
@@ -111,7 +120,7 @@ class MUser extends E\Module
 		$this->id = -1;
 		$this->login = '';
 		$this->groups = [];
-		$this->permissions = [];
+		$this->permissions = $this->getPermissions_Default();
 	}
 
 	/* Config */
@@ -145,7 +154,8 @@ class MUser extends E\Module
 				$this->id = $user['id'];
 				$this->login = $user['login'];
 				$this->groups = $user_info['Groups'];
-				$this->permissions = $user_info['Groups_Permissions'];
+				$this->permissions = array_merge($this->getPermissions_Default(),
+						$user_info['Groups_Permissions']);
 
 				return;
 			}
