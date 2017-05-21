@@ -37,7 +37,10 @@ class MABTemplate extends \E\Module
             return;
         }
 
-        $this->header->addHtml(file_get_contents($file_path));
+        $header_html = file_get_contents($file_path);
+        $header_html = str_replace('{{base}}', SITE_BASE);
+
+        $this->header->addHtml($header_html);
     }
 
 }
