@@ -75,7 +75,7 @@ class HConfig
 
 		require(PATH_DATA . '/Config/config.php');
 
-        self::$Properties = array_merge_recursive(self::$Properties,
+        self::$Properties = array_replace_recursive(self::$Properties,
                 $eConfig->getProperties());
 	}
 

@@ -84,7 +84,7 @@
                         <div class="mg-clear"></div>
 	            	</div>
 	            	<div class="lb-povered-by">
-	            		Powered by <a href="https://allblue.pl">AllBlue</a>
+	            		Powered by <a href="https://allblue.pl" class="text-primary">AllBlue</a>
 	            	</div>
 	            </div>
             </div>
