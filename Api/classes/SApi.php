@@ -55,6 +55,11 @@ class SApi extends E\Site
         if ($this->api === null)
             return CResult::Failure('Unknown `api`.');
 
+        if (!E\Args::Post_ValidateSize()) {
+            return CResult::Failure('File size too big.')
+                ->add('errorMessage', EC\HText::_('Api:Errors_PostSizeExceeded'));
+        }
+
         $post_args = E\Args::Post_All();
         if (array_key_exists('json', $post_args)) {
             $api_args = json_decode($post_args['json'], true);
