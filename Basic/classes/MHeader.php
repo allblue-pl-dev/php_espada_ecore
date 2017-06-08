@@ -38,7 +38,7 @@ class MHeader extends \E\Module
         if (EDEBUG)
             $uri .= "?v=" . EC\HHash::Generate(8);
         else
-            $uri .= "?v=" . EC\HConfig::Get('version', '1');
+            $uri .= "?v=" . EC\HConfig::Get('Config', 'version', '1');
 
         $this->html .= $this->getNode('script', [
             "type" => "text/javascript",

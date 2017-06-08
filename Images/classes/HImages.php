@@ -21,7 +21,7 @@ class HImages
     }
 
     static public function Scale_ToMinSize($file_path, $dest_file_path,
-            $min_width, $min_height, $quality)
+            $min_width, $min_height, $quality = 75)
     {
         $memory_limit = ini_get('memory_limit');
         ini_set('memory_limit', '128M');

@@ -13,13 +13,16 @@ class HFiles
         foreach ($objects as $object) {
             if ($object != "." && $object != "..") {
                 if (is_dir($dir_path."/".$object)) {
-                    self::Dir_Remove($dir_path."/".$object);
-                } else
-                    unlink($dir_path."/".$object);
+                    if (!self::Dir_Remove($dir_path."/".$object))
+                        return false;
+                } else {
+                    if (!unlink($dir_path."/".$object))
+                        return false;
+                }
             }
         }
 
-        rmdir($dir_path);
+        return rmdir($dir_path);
     }
 
 }
