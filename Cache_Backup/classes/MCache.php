@@ -42,7 +42,7 @@ class MCache extends E\Module
             return null;
         $file_id = $this->db->getInsertedId();
 
-        return new CFile($this, $file_id, $user_id, $file_hash);
+        return new CFile($file_id, $user_id, $file_hash);
     }
 
     public function getFile($file_id, $user_id = null)
@@ -59,28 +59,12 @@ class MCache extends E\Module
         if ($file_row === null)
             return null;
 
-        return new CFile($this, $file_id, $file_row['User_Id'], $file_row['Hash']);
+        return new CFile($file_id, $file_row['User_Id'], $file_row['Hash']);
     }
 
-    public function getFilePath($file_id, $file_hash)
+    public function removeFile($file_id)
     {
-        return self::Dir . "/{$file_id}-{$file_hash}.cache";
-    }
 
-    public function releaseFile($file_id, $user_id, $file_hash)
-    {
-        $this->requirePreInitialize();
-
-        if (file_exists($this->getFilePath($file_id, $file_hash)))
-            unlink($this->getFilePath($file_id, $file_hash));
-
-        $where_conditions = [
-            [ 'Id', '=', $file_id ]
-        ];
-        if ($user_id !== null)
-            $where_conditions[] = [ 'User_Id', '=', $user_id ];
-
-        $this->filesTable->delete_Where($where_conditions);
     }
 
     protected function _preInitialize(E\Site $site)
@@ -93,6 +77,12 @@ class MCache extends E\Module
     protected function _deinitialize()
     {
 
+    }
+
+
+    private function getFilePath($file_id, $file_hash)
+    {
+        return "{$this->dir}/{$file_id}-{$file_hash}.cache";
     }
 
 }

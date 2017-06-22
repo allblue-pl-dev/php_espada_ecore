@@ -6,17 +6,13 @@ use E, EC;
 class CFile
 {
 
-    private $cache = null;
-
     private $id = null;
     private $userId = null;
     private $hash = null;
 
 
-    public function __construct(MCache $cache, $id, $user_id, $hash)
+    public function __construct($id, $user_id, $hash)
     {
-        $this->cache = $cache;
-
         $this->id = $id;
         $this->userId = $user_id;
         $this->hash = $hash;
@@ -29,12 +25,12 @@ class CFile
 
     public function getFilePath()
     {
-        return $this->cache->getFilePath($this->id, $this->hash);
+        return MCache::Dir . "/{$this->id}-{$this->hash}.cache";
     }
 
-    public function release()
+    public function remove()
     {
-        $this->cache->releaseFile($this->id, $this->userId, $this->hash);
+
     }
 
 }
