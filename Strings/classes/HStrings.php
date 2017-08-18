@@ -74,8 +74,8 @@ class HStrings
     {
         $new_str = '';
         for ($i = 0; $i < mb_strlen($string); $i++) {
-            if (mb_strpos($allowed_characters_string, $string[$i]))
-                $new_str .= $string[$i];
+            if (mb_strpos($allowed_characters_string, $string[$i]) > -1)
+                $new_str .= (string)$string[$i];
         }
 
         return $new_str;
