@@ -96,7 +96,7 @@ class MDatabase extends E\Module
 		if ($value === null)
 			return 'NULL';
 
-		return '\'' . $this->mysqli->escape_string($value) . '\'';
+		return '\'' . $this->mysqli->escape_string((string)$value) . '\'';
 	}
 
 	/* Gets */

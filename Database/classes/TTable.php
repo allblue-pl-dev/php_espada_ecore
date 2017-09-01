@@ -365,8 +365,8 @@ class TTable
 
             if (array_key_exists('parser', $column)) {
                 if (array_key_exists('out', $column['parser'])) {
-                    $parsed_cols = $column['parser']['out']($this, $row,
-                            $column_name, $unescaped_row[$column_name]);
+                    $parsed_cols = $column['parser']['out']($row, $column_name,
+                            $unescaped_row[$column_name]);
                     foreach ($parsed_cols as $parsed_col_name => $parsed_col_value) {
                         if ($parsed_col_name !== $column_name) {
                             if ($this->columnExists($parsed_col_name, true)) {
@@ -565,6 +565,11 @@ class TTable
 
     public function setColumnParser($column_name, array $parser)
     {
+        foreach ($parser as $parser_type => $parser_info) {
+            if ($parser_type !== 'in' && $parser_type !== 'out')
+                throw new \Exception('Wrong `parser` format.');
+        }
+
         $column = &$this->getColumnRef($column_name);
 
         if (array_key_exists('out', $parser))
@@ -683,8 +688,8 @@ class TTable
                             "`{$col_name}` in rows.");
 
                 if (array_key_exists('in', $columns[$col_name]['parser'])) {
-                    $col_val = $columns[$col_name]['parser']['in']($this, $row,
-                            $col_name, $col_val);
+                    $col_val = $columns[$col_name]['parser']['in']($row, $col_name,
+                            $col_val);
                 }
 
                 $db_row[] = $columns[$col_name]['field']->escape($this->db, $col_val);

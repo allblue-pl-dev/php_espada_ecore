@@ -20,7 +20,7 @@ class TLogs extends Database\TTable
         ]);
 
         $this->setColumnParser('Data', [
-            function(&$row, $name, $value) {
+            'out' => function($row, $name, $value) {
                 $value = json_decode($value);
                 if ($value === null)
                     throw new \Exception('Cannot decode json.');
@@ -29,7 +29,7 @@ class TLogs extends Database\TTable
                     $name => $value['data']
                 ];
             },
-            function($table, $row, $name, $value) {
+            'in' => function($table, $row, $name, $value) {
                 return json_encode([ 'data' => (object)$value ]);
             }
         ]);

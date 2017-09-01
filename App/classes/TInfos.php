@@ -28,12 +28,12 @@ class TInfos extends EC\Database\TTable
 
         /* Parsers */
         $this->setColumnParser('TablesIds', [
-            function(&$row, $name, $value) {
+            'out' => function($row, $name, $value) {
                 return [
                     $name => json_decode($value, true)['TablesIds']
                 ];
             },
-            function($table, $row, $name, $value) {
+            'in' => function($row, $name, $value) {
                 return json_encode([ 'TablesIds' => $value ]);
             }
         ]);

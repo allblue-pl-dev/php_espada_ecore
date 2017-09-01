@@ -26,7 +26,7 @@ class TUsers extends Database\TTable
         ]);
 
         $this->setColumnParser('Groups', [
-            'out' => function($table, $row, $name, $value) {
+            'out' => function($row, $name, $value) {
                 $groups = explode(',', $row[$name]);
 
                 return [
@@ -34,7 +34,7 @@ class TUsers extends Database\TTable
                     $name . '_Permissions' => HPermissions::Get_FromGroups($groups)
                 ];
             },
-            'in' => function($table, $row, $name, $value) {
+            'in' => function($row, $name, $value) {
                 if (!is_array($value))
                     throw new \Exception('`groups` column must be an array.');
 

@@ -23,22 +23,22 @@ class TTasks extends Database\TTable
         ]);
 
         $this->setColumnParser('Info', [
-            function($row, $name, $value) {
+            'out' => function($row, $name, $value) {
                 return [
                     $name => json_decode($value, true)['info']
                 ];
             },
-            function($row, $name, $value) {
+            'in' => function($row, $name, $value) {
                 return json_encode([ 'info' => $value ]);
             }
         ]);
         $this->setColumnParser('Data', [
-            function($row, $name, $value) {
+            'out' => function($row, $name, $value) {
                 return [
                     $name => json_decode($value, true)['data']
                 ];
             },
-            function($row, $name, $value) {
+            'in' => function($row, $name, $value) {
                 return json_encode([ 'data' => $value ]);
             }
         ]);
