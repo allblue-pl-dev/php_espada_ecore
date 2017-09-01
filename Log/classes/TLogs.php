@@ -29,7 +29,7 @@ class TLogs extends Database\TTable
                     $name => $value['data']
                 ];
             },
-            'in' => function($table, $row, $name, $value) {
+            'in' => function($row, $name, $value) {
                 return json_encode([ 'data' => (object)$value ]);
             }
         ]);
