@@ -646,6 +646,16 @@ class TTable
         $this->addColumnVFields($column_name, $v_fields);
     }
 
+    public function stripRow($row, $table_columns_only = true)
+    {
+        foreach ($row as $column_name => $column_value) {
+            if (!$this->columnExists($column_name, $table_columns_only))
+                unset($row[$column_name]);
+        }
+
+        return $row;
+    } 
+
     public function update($rows, $ignore_not_existing = false)
     {
         $this->checkColumns();
