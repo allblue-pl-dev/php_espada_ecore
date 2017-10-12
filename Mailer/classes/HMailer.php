@@ -8,7 +8,7 @@ class HMailer extends E\Module
 
 	static public function NewMail($to_mail, $to_name)
 	{
-		$config = new EC\CConfig('Mail');
+		$config = new EC\CConfig('Mailer');
 
 		$mail = new CMail($config->from_Mail, $config->from_Name,
 				$to_mail, $to_name);
