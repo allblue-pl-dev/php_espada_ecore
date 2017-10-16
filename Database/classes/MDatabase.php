@@ -312,7 +312,7 @@ class MDatabase extends E\Module
 		$this->disconnect();
 	}
 
-	private function connect()
+	public function connect()
 	{
 		$config = new EC\CConfig('Database');
 
@@ -334,7 +334,7 @@ class MDatabase extends E\Module
 		$this->mysqli->query('SET NAMES ' . str_replace('-', '', $charset_encoding));
 	}
 
-	private function disconnect()
+	public function disconnect()
 	{
 		$this->mysqli->close();
 	}

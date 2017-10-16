@@ -212,6 +212,7 @@ class HSPKTables
                 if ($db_column_name === null)
                     continue;
 
+                $filter = EC\HStrings::EscapeLangCharacters($filter);
                 $db_filter = $t_table->getDB()->escapeString("%{$filter}%");
 
                 $conditions[] = "CAST({$db_column_name} AS CHAR)" .

@@ -654,7 +654,7 @@ class TTable
         }
 
         return $row;
-    } 
+    }
 
     public function update($rows, $ignore_not_existing = false)
     {
@@ -828,10 +828,21 @@ class TTable
                 $db_value = $value;
                 $sign = '';
             } else {
-                if (is_array($value))
-                    $db_value = ' ' . $this->escapeArray($column['field'], $value);
-                else
-                    $db_value = ' ' . $column['field']->escape($this->db, $value);
+                if ($value === null) {
+                    if ($sign === '=')
+                        $db_value = 'IS NULL';
+                    else if ($sign === '<>')
+                        $db_value = 'IS NOT NULL';
+                    else
+                        throw new \Exception("Unknown `{$sign}` and `null` conjuction.");
+
+                    $sign = '';
+                } else {
+                    if (is_array($value))
+                        $db_value = ' ' . $this->escapeArray($column['field'], $value);
+                    else
+                        $db_value = ' ' . $column['field']->escape($this->db, $value);
+                }
             }
 
             $args[] = "{$db_column_name} {$sign}{$db_value}";
