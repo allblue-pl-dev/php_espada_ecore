@@ -33,6 +33,8 @@ class CReader
         $content = file_get_contents($file_path);
 
         $this->parseText($content);
+
+        return true;
     }
 
     private function parseText($content)
@@ -315,10 +317,11 @@ class CReader
             $start_string = "stream\n";
 
         $end_string = "\r\nendstream";
-        if (strrpos($stream, $end_string) !== $stream - strlen($end_string)) {
+
+        if (strrpos($stream, $end_string) !== strlen($stream) - strlen($end_string)) {
             $end_string = "\nendstream";
 
-            if (strrpos($stream, $end_string) !== $stream - strlen($end_string))
+            if (strrpos($stream, $end_string) !== strlen($stream) - strlen($end_string))
                 $end_string = "endstream";
         }
 

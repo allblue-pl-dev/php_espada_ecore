@@ -525,8 +525,8 @@ class TTable
                 $query_extension, $group_extension);
     }
 
-    public function select_Custom($select, $from, $query_extension,
-            $group_extension)
+    public function select_Custom($select, $from, $query_extension = '',
+            $group_extension = '')
     {
         $rows = $this->select_Raw($select, $from, $query_extension,
                 $group_extension);

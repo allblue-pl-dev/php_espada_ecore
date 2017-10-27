@@ -43,6 +43,12 @@ class CArgs
         $this->args[$name]['value'] = $value;
     }
 
+    public function __exists($name)
+    {
+        return in_array($name, array_keys($this->args));
+    }
+
+
     private function validateArg($name)
     {
         if (!in_array($name, array_keys($this->args)))
