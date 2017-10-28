@@ -163,6 +163,11 @@ class HSPKTables
         foreach ($rows as $row) {
             $parsed_row = [];
             foreach ($spk_table['columns'] as $col_name => $header) {
+                if ($col_name[0] === '$') {
+                    $parsed_row[] = '';
+                    continue;
+                }
+
                 if (!array_key_exists($col_name, $row)) {
                     throw new \Exception("Column `{$col_name}`" .
                             " doesn't exist in a table.");
