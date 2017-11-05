@@ -8,6 +8,16 @@ class HConfig
 
     static private $Properties = null;
 
+    static public function DB_Get(EC\MDatabase $db, $name)
+    {
+
+    }
+
+    static public function DB_Set(EC\MDatabase $db, $name, $value)
+    {
+        
+    }
+
     static public function Get($package_name, $property_name, $default_value = null)
     {
         self::Initialize();

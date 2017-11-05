@@ -10,11 +10,28 @@ class CCSV
     private $charset = '';
 
     private $separator = '';
-    private $rows = [];
 
-    public function __construct($separators = [';', ','])
+    private $file = null;
+    private $rowIndex = 0;
+    private $line0 = null;
+    private $line1 = null;
+
+    public function __construct($separators = [';', ','], $charset = '')
     {
         $this->separators = $separators;
+        $this->charset = $charset;
+    }
+
+    public function close()
+    {
+        if ($this->file !== null)
+            fclose($this->file);
+        $this->file = null;
+
+        $this->rowIndex = 0;
+
+        $this->line0 = null;
+        $this->line1 = null;
     }
 
     public function setCharset($charset)
@@ -22,84 +39,99 @@ class CCSV
         $this->charset = $charset;
     }
 
-    public function read($file_path)
+    public function open($file_path)
     {
+        if ($this->file !== null)
+            throw new \Exception('Close `CSV` before opening.');
+
         if (!file_exists($file_path))
             return false;
 
-        $convert_charset = $this->charset !== '';
-
-        $file = fopen($file_path, 'r');
-
-        if ($file === false)
+        $this->file = fopen($file_path, 'r');
+        if ($this->file === false) {
+            $this->close();
             return false;
-
-        $first_line = null;
-        $second_line = null;
-
-        $first_line = fgets($file);
-        if ($first_line === false) {
-            fclose($file);
-            return true;
         }
-        if ($convert_charset)
-            $first_line = iconv($this->charset, 'utf-8', $first_line);
 
-        $second_line = fgets($file);
-        if ($convert_charset)
-            $second_line = iconv($this->charset, 'utf-8', $second_line);
+        $this->line0 = null;
+        $this->line1 = null;
 
-        $this->separator = null;
-        $max_count = -1;
-        if ($second_line !== false) {
-            foreach ($this->separators as $separator) {
-                $first_line_count = substr_count($first_line, $separator);
-                $second_line_count = substr_count($second_line, $separator);
-
-                if ($first_line_count === 0)
-                    continue;
-
-                if ($first_line_count === $second_line_count) {
-                    if ($first_line_count > $max_count)
-                        $this->separator = $separator;
-                }
-            }
-        }
-        if ($this->separator === null)
-            throw new \Exception('Cannot determine separator.');
-
-        $this->readRow($first_line);
-        if ($second_line === false) {
-            fclose($file);
-
+        $this->line0 = fgets($this->file);
+        if ($this->line0 === false) {
+            $this->line0 = null;
             return true;
         }
 
-        $this->readRow($second_line);
+        $this->determineSeparator();
 
-        while (($line = fgets($file)) !== false) {
-            if ($convert_charset) {
-                $this->readRow(iconv($this->charset, 'utf-8', $line));
-            } else
-                $this->readRow($line);
+        if ($this->line1 === false) {
+            $this->close();
+            return true;
         }
-
-        fclose($file);
 
         return true;
     }
 
-    public function getRowsLength()
+    public function nextRow()
     {
-        return count($this->rows);
+        $line = null;
+        $row = null;
+        if ($this->rowIndex === 0)
+            $line = $this->line0;
+        else if ($this->rowIndex === 1) {
+            $line = $this->line1;
+        } else {
+            $line = fgets($this->file);
+            $line = $line === false ? null : $line;
+        }
+
+        if ($line === null)
+            return null;
+
+        if ($this->charset !== '')
+            $row = $this->readRow(iconv($this->charset, 'utf-8', $line));
+        else
+            $row = $this->readRow($line);
+
+        $this->rowIndex++;
+
+        return $row;
     }
 
-    public function getRow($i)
-    {
-        if ($i < 0 || $i >= $this->getRowsLength())
-            throw new \Exception("Cannot read row {$i}.");
 
-        return $this->rows[$i];
+    private function determineSeparator()
+    {
+        if ($this->charset !== '')
+            $this->line0 = iconv($this->charset, 'utf-8', $this->line0);
+
+        $this->line1 = fgets($this->file);
+        if ($this->charset !== '')
+            $this->line1 = iconv($this->charset, 'utf-8', $this->line1);
+
+        if (count($this->separators) === 1) {
+            $this->separator = $this->separators[0];
+            return;
+        }
+
+        $this->separator = null;
+        $max_count = -1;
+        if ($this->line1 !== false) {
+            foreach ($this->separators as $separator) {
+                $line0_count = substr_count($this->line0, $separator);
+                $line1_count = substr_count($this->line1, $separator);
+
+                if ($line0_count === 0)
+                    continue;
+
+                if ($line0_count === $line1_count) {
+                    if ($line0_count > $max_count)
+                        $this->separator = $separator;
+                }
+            }
+        }
+
+        if ($this->separator === null)
+            throw new \Exception('Cannot determine separator.');
     }
 
     private function readRow($line)
@@ -115,7 +147,7 @@ class CCSV
             $row->addColumn($column);
         }
 
-        $this->rows[] = $row;
+        return $row;
     }
 
     private function readRow_ParseQuatations($line)
