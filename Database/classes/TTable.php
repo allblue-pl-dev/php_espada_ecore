@@ -137,7 +137,7 @@ class TTable
         return $this->count($group_extension);
     }
 
-    public function delete($query_extension)
+    public function delete($query_extension = '')
     {
         $query = 'DELETE ' . $this->db->quote($this->alias) . ' FROM ' .
                 $this->getQuery_From();

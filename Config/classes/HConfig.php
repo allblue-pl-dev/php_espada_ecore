@@ -10,12 +10,24 @@ class HConfig
 
     static public function DB_Get(EC\MDatabase $db, $name)
     {
+        $table = new TSettings($db);
+        $row = $table->row_Where([
+            [ 'Name', '=', $name ],
+        ]);
 
+        if ($row === null)
+            return null;
+
+        return $row['Value'];
     }
 
     static public function DB_Set(EC\MDatabase $db, $name, $value)
     {
-        
+        $table = new TSettings($db);
+        return $table->update([[
+            'Name' => $name,
+            'Value' =>  $value,
+        ]]);
     }
 
     static public function Get($package_name, $property_name, $default_value = null)
