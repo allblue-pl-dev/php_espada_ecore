@@ -18,6 +18,9 @@ class HDate
         if ($str === null || $str === '')
             return null;
 
+        if (!is_numeric($str))
+            return null;
+
         /* Modify by (1970-01-01 - 1900-01-01) days difference. */
         $modificator = 25567;
         $diff = (intval($str) - $modificator - 2) * self::Span_Day;
