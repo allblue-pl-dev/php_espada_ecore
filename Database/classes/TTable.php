@@ -218,13 +218,18 @@ class TTable
     }
 
     public function getColumnTableRefs($table_prefix, $field_prefix = '',
-            $excluded_columns = [ 'Id' ])
+            $excluded_columns = [ 'Id' ], $included_columns = null)
     {
         $column_refs = [];
         foreach ($this->columns_Table as $column_name => $column_field) {
             $column = $this->getColumn($column_name, true);
-            if (in_array($column['name'], $excluded_columns))
-                continue;
+            if ($excluded_columns !== null) {
+                if (in_array($column['name'], $excluded_columns))
+                    continue;
+            } else if ($included_columns !== null) {
+                if (!in_array($column['name'], $included_columns))
+                    continue;
+            }
 
             $column_refs[$field_prefix . $column['name']] =
                     [ $table_prefix . '.' . $column['name'], $column['name'] ];
