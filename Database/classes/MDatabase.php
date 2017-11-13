@@ -314,6 +314,9 @@ class MDatabase extends E\Module
 
 	public function connect()
 	{
+		if ($this->mysqli !== null)
+			throw new \Exception('`disconnect` from database before calling `conenct`.');
+
 		$config = new EC\CConfig('Database');
 
 		$host = 	$config->getRequired("{$this->prefix}_Host");
@@ -336,7 +339,9 @@ class MDatabase extends E\Module
 
 	public function disconnect()
 	{
+		$this->transaction_Finish(false);
 		$this->mysqli->close();
+		$this->mysqli = null;
 	}
 
 }
