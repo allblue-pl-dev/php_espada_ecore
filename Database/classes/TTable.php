@@ -50,7 +50,7 @@ class TTable
             if (array_key_exists($column_name, $this->columns))
                 throw new \Exception("Column `{$column_name}` already exists.");
 
-            $column = &$this->parseColumnInfo($column_name, $column_info, $optional);
+            $column = &$this->parseColumnInfo($column_name, $column_info, $extra, $optional);
 
             $this->columns[$column_name] = &$column;
 
@@ -856,7 +856,7 @@ class TTable
         return implode(" {$logic_operator} ", $args);
     }
 
-    private function &parseColumnInfo($column_name, $column_info, $optional = false)
+    private function &parseColumnInfo($column_name, $column_info, $extra, $optional)
     {
         $column_optional = false;
 
@@ -867,6 +867,9 @@ class TTable
             $column_expr = $column_info[0];
             $column_field = $column_info[1];
         }
+
+        if ($extra && $column_expr !== null)
+            $column_expr = '(' . $column_expr . ')';
 
         $v_field = $column_field === null ? null : $column_field->getVField();
         $column = [
