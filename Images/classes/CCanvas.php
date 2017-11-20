@@ -13,14 +13,33 @@ class CCanvas
         $this->image = $image;
     }
 
-    public function image($file_path, $coords)
+    public function image($file_path, $coords, array $size = null)
     {
         $t_image = HImages::Create($file_path);
         if ($t_image === null)
             throw new \Exception('Cannot create image.');
-        [ $t_width, $t_height ] = getimagesize($file_path);
 
-        imagecopy($this->image, $t_image, $coords[0], $coords[1], 0, 0,
+        $t_width = imagesx($t_image);
+        $t_height = imagesy($t_image);
+
+        $t_x = 0;
+        $t_y = 0;
+
+        if ($size !== null) {
+            $s_image = HImages::Scale_ToMinSize_Image($t_image, $size[0], $size[1], true);
+            imagedestroy($t_image); $t_image = $s_image;
+
+            $t_width = imagesx($t_image);
+            $t_height = imagesy($t_image);
+
+            $t_x = $t_width > $size[0] ? ($t_width - $size[0]) / 2 : 0;
+            $t_y = $t_height > $size[1] ? ($t_height - $size[1]) / 2 : 0;
+        }
+
+        $t_width = imagesx($t_image);
+        $t_height = imagesy($t_image);
+
+        imagecopy($this->image, $t_image, $coords[0], $coords[1], $t_x, $t_y,
                 $t_width, $t_height);
 
         return $this;

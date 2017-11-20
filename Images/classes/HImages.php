@@ -54,4 +54,26 @@ class HImages
         return $result;
     }
 
+    static public function Scale_ToMinSize_Image($image, $min_width, $min_height,
+            $scale_up = false)
+    {
+        $image_width = imagesx($image);
+        $image_height = imagesy($image);
+
+        if (!$scale_up && ($image_width < $min_width || $image_height < $min_height)) {
+            $t_image = imagecreatetruecolor($image_width, $image_height);
+            imagecopy($t_image, $image, 0, 0, 0, 0, $image_width, $image_height);
+
+            return $t_image;
+        }
+
+        $width_factor = $min_width / $image_width;
+        $height_factor = $min_height / $image_height;
+        $factor = max($width_factor, $height_factor);
+
+        $t_image = imagescale($image, $factor * $image_width, $factor * $image_height);
+
+        return $t_image;
+    }
+
 }
