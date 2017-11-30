@@ -34,6 +34,9 @@ class CTask
 
     public function destroy()
     {
+        if (!$this->destroyed)
+            $this->requiresUpdate = true;
+
         $this->destroyed = true;
     }
 

@@ -267,9 +267,14 @@ class HSPKTables
         if ($first_order_column_name === null)
             $first_order_column_name = array_keys($spk_table['columns'])[0];
 
-        $order_by = [ $first_order_column_name . ($order_type ? ' DESC' : '') ];
-        foreach ($order_columns as $column_name => $column)
-            $order_by[] = $column_name . ($column['orderBy'][1] ? ' DESC' : '');
+        $table_column = $t_table->getColumn($first_order_column_name);
+        $first_order_column_expr = $table_column['expr'];
+
+        $order_by = [ $first_order_column_expr . ($order_type ? ' DESC' : '') ];
+        foreach ($order_columns as $column_name => $column) {
+            $table_column = $t_table->getColumn($column_name);
+            $order_by[] = $table_column['expr'] . ($column['orderBy'][1] ? ' DESC' : '');
+        }
 
         return implode(',', $order_by);
     }
