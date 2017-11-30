@@ -132,7 +132,8 @@ class CTask
         /* Delete */
         if ($this->isDestroyed()) {
             return (new TTasks($db))->delete_Where([
-                [ 'Hash', '=', $this->hash ]
+                [ 'Hash', '=', $this->hash ],
+                [ 'User_Id', '=', $this->userId ],
             ]);
         }
 
