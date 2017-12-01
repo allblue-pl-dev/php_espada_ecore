@@ -38,8 +38,10 @@ class AApi
         try {
             return call_user_func([ $this, $action['fn'] ], $api_args);
         } catch (\Exception $e) {
-            if (!EDEBUG)
+            if (!EDEBUG) {
+                E\Exception::NotifyListeners($e);
                 return CResult::Error(INTERNAL_ERROR_MESSAGE);
+            }
 
             throw $e;
         }
