@@ -34,10 +34,10 @@ class CCanvas
 
             $t_x = $t_width > $size[0] ? ($t_width - $size[0]) / 2 : 0;
             $t_y = $t_height > $size[1] ? ($t_height - $size[1]) / 2 : 0;
-        }
 
-        $t_width = imagesx($t_image);
-        $t_height = imagesy($t_image);
+            $t_width = min($t_width, $size[0]);
+            $t_height = min($t_height, $size[1]);
+        }
 
         imagecopy($this->image, $t_image, $coords[0], $coords[1], $t_x, $t_y,
                 $t_width, $t_height);
