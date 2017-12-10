@@ -88,9 +88,10 @@ class CCSV
         if ($line === null)
             return null;
 
-        if ($this->charset !== '')
-            $row = $this->readRow(iconv($this->charset, 'utf-8', $line));
-        else
+        if ($this->charset !== '') {
+            $row = $this->readRow(EC\Strings\HEncoding::Convert($line,
+                    'utf-8', $this->charset));
+        } else
             $row = $this->readRow($line);
 
         $this->rowIndex++;
@@ -101,12 +102,16 @@ class CCSV
 
     private function determineSeparator()
     {
-        if ($this->charset !== '')
-            $this->line0 = iconv($this->charset, 'utf-8', $this->line0);
+        if ($this->charset !== '') {
+            $this->line0 = EC\Strings\HEncoding::Convert($this->line0,
+                    'utf-8', $this->charset);
+        }
 
         $this->line1 = fgets($this->file);
-        if ($this->charset !== '')
-            $this->line1 = iconv($this->charset, 'utf-8', $this->line1);
+        if ($this->charset !== '') {
+            $this->line1 = EC\Strings\HEncoding::Convert($this->line1,
+                    'utf-8', $this->charset);
+        }
 
         if (count($this->separators) === 1) {
             $this->separator = $this->separators[0];
