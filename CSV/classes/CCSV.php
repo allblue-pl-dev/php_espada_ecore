@@ -56,18 +56,13 @@ class CCSV
         $this->line0 = null;
         $this->line1 = null;
 
-        $this->line0 = fgets($this->file);
-        if ($this->line0 === false) {
-            $this->line0 = null;
+        $this->line0 = $this->nextLine();
+        if ($this->line0 === null)
             return true;
-        }
+
+        $this->line1 = $this->nextLine();
 
         $this->determineSeparator();
-
-        if ($this->line1 === false) {
-            $this->close();
-            return true;
-        }
 
         return true;
     }
@@ -78,21 +73,15 @@ class CCSV
         $row = null;
         if ($this->rowIndex === 0)
             $line = $this->line0;
-        else if ($this->rowIndex === 1) {
+        else if ($this->rowIndex === 1)
             $line = $this->line1;
-        } else {
-            $line = fgets($this->file);
-            $line = $line === false ? null : $line;
-        }
+        else
+            $line = $this->nextLine();
 
         if ($line === null)
             return null;
 
-        if ($this->charset !== '') {
-            $row = $this->readRow(EC\Strings\HEncoding::Convert($line,
-                    'utf-8', $this->charset));
-        } else
-            $row = $this->readRow($line);
+        $row = $this->readRow($line);
 
         $this->rowIndex++;
 
@@ -102,28 +91,23 @@ class CCSV
 
     private function determineSeparator()
     {
-        if ($this->charset !== '') {
-            $this->line0 = EC\Strings\HEncoding::Convert($this->line0,
-                    'utf-8', $this->charset);
-        }
-
-        $this->line1 = fgets($this->file);
-        if ($this->charset !== '') {
-            $this->line1 = EC\Strings\HEncoding::Convert($this->line1,
-                    'utf-8', $this->charset);
-        }
-
         if (count($this->separators) === 1) {
             $this->separator = $this->separators[0];
             return;
         }
 
+        $line0 = $this->line0;
+        $line1 = $this->line1;
+
+        if ($line0 === null || $line1 === null)
+            throw new \Exception('Cannot determine separator without second line.');
+
         $this->separator = null;
         $max_count = -1;
-        if ($this->line1 !== false) {
+        if ($line1 !== null) {
             foreach ($this->separators as $separator) {
-                $line0_count = substr_count($this->line0, $separator);
-                $line1_count = substr_count($this->line1, $separator);
+                $line0_count = substr_count($line0, $separator);
+                $line1_count = substr_count($line1, $separator);
 
                 if ($line0_count === 0)
                     continue;
@@ -137,6 +121,18 @@ class CCSV
 
         if ($this->separator === null)
             throw new \Exception('Cannot determine separator.');
+    }
+
+    private function nextLine()
+    {
+        $line = fgets($this->file);
+        if ($line === false)
+            return null;
+
+        if ($this->charset !== '')
+            return EC\Strings\HEncoding::Convert($line, 'utf-8', $this->charset);
+
+        return $line;
     }
 
     private function readRow($line)
