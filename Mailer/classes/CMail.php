@@ -1,9 +1,14 @@
 <?php namespace EC\Mailer;
 defined('_ESPADA') or die(NO_ACCESS);
 
-require(__DIR__.'/../3rdparty/PHPMailer/PHPMailerAutoload.php');
+require(__DIR__.'/../3rdparty/PHPMailer/src/Exception.php');
+require(__DIR__.'/../3rdparty/PHPMailer/src/OAuth.php');
+require(__DIR__.'/../3rdparty/PHPMailer/src/PHPMailer.php');
+require(__DIR__.'/../3rdparty/PHPMailer/src/POP3.php');
+require(__DIR__.'/../3rdparty/PHPMailer/src/SMTP.php');
 
-use E, EC;
+use E, EC,
+	PHPMailer\PHPMailer;
 
 class CMail
 {
@@ -33,7 +38,7 @@ class CMail
 
 		$this->addTo($to_mail, $to_name);
 
-		$this->mail = new \PHPMailer(true);
+		$this->mail = new PHPMailer\PHPMailer(true);
 		$this->mail->isHTML(true);
 		$this->mail->CharSet = 'UTF-8';
 	}
@@ -47,6 +52,14 @@ class CMail
 		$this->mail->Password = $password;
 		$this->mail->SMTPSecure = $secure;
 		$this->mail->Port = $port;
+
+		$this->mail->SMTPOptions = [
+			'ssl' => [
+				'verify_peer' => false,
+		        'verify_peer_name' => false,
+		        'allow_self_signed' => true
+			]
+		];
 	}
 
 	public function setSubject($subject)
