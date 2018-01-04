@@ -121,6 +121,9 @@ class CMail
 	public function send()
 	{
 		try {
+			if (E\Config::IsType('no-mails'))
+				return true;
+
 			$this->mail->Subject = $this->subject;
 			$this->mail->From = $this->from_Mail;
 			$this->mail->FromName = $this->from_Name === '' ?
