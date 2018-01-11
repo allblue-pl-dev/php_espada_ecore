@@ -25,8 +25,10 @@ class CRow
 
     public function getColumn($i)
     {
-        if ($i < 0 || $i >= $this->getColumnsLength())
-            throw new \Exception("Cannot read column {$i}.");
+        if ($i < 0 || $i >= $this->getColumnsLength()) {
+            throw new \Exception("Cannot read column {$i} in :" .
+                    print_r($this->columns, true));
+        }
 
         return $this->columns[$i];
     }

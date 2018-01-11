@@ -128,6 +128,11 @@ class CCSV
         $line = fgets($this->file);
         if ($line === false)
             return null;
+        if (preg_match("#(^|{$this->separator})\"(.*?)$#", $line)) {
+            $line_part = fgets($this->file);
+            if ($line_part !== null)
+                $line .= $line_part;
+        }
 
         if ($this->charset !== '')
             return EC\Strings\HEncoding::Convert($line, 'utf-8', $this->charset);
@@ -144,7 +149,7 @@ class CCSV
         $columns = explode($this->separator, $line);
 
         foreach ($columns as $column) {
-            $column = str_replace('&#44;', ',', $column);
+            $column = str_replace('{{separator}}', $this->separator, $column);
             $row->addColumn($column);
         }
 
@@ -153,12 +158,12 @@ class CCSV
 
     private function readRow_ParseQuatations($line)
     {
-        $regexp = '#(^|,)"(.*?)"($|,)#';
+        $regexp = "#(^|{$this->separator})'(.*?)\"({$this->separator}|$)#s";
 
         preg_match_all($regexp, $line, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $match) {
-            $match_2 = str_replace(',', '&#44;', $match[2]);
+            $match_2 = str_replace($this->separator, '{{separator}}', $match[2]);
 
             $line = str_replace($match[0], $match[1] . $match_2 . $match[3],
                     $line);
