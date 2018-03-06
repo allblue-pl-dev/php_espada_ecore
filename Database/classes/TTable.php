@@ -744,7 +744,7 @@ class TTable
         $db_sets = [];
         foreach ($values as $column_name => $value) {
             $column = $this->getColumn($column_name, true);
-            $db_sets[] = $column['name'] . '=' .
+            $db_sets[] = $column['expr'] . '=' .
                     $this->escapeColumnValue($values, $column, $value);
         }
 
