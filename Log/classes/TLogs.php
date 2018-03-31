@@ -31,11 +31,12 @@ class TLogs extends Database\TTable
                 ];
             },
             'in' => function($row, $name, $value) {
-                $json = json_encode([ 'data' => (object)$value ]);
-                if ($json === null || $json === '')
-                    $json = 'Cannot parse json: ' . print_r($value, true);
+                return "Error test: " . print_r($value, true);
+                // $json = json_encode([ 'data' => (object)$value ]);
+                // if ($json === null || $json === '')
+                //     $json = 'Cannot parse json: ' . print_r($value, true);
 
-                return $json;
+                // return $json;
             }
         ]);
     }
