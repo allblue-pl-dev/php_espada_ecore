@@ -737,6 +737,36 @@ class TTable
         return $this->db->query_Execute($query);
     }
 
+    public function update_ById($rows)
+    {
+        $this->checkColumns();
+
+        if (count($rows) === 0)
+            return true;
+
+        $first_key = array_keys($rows)[0];
+
+        if (!is_array($rows[$first_key]))
+            throw new \Exception('Expecting `rows` to be array of arrays.');
+
+        $innerTransaction = false;
+        if (!$this->db->transaction_IsAutocommit()) {
+            $this->db->transaction_Start();
+            $innerTransaction = true;
+        }
+
+        foreach ($rows as $row) {
+            if (!$this->update_Where($row, [[ 'Id', '=', $row['Id'] ]])) {
+                if ($innerTransaction)
+                    $this->db->transaction_Finish(false);
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function update_Where($values, $where_conditions = [])
     {
         $this->checkColumns();
