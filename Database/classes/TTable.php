@@ -755,7 +755,18 @@ class TTable
             $innerTransaction = true;
         }
 
+        $new_rows = [];
         foreach ($rows as $row) {
+            if ($row['Id'] === null) {
+                $new_rows[] = $row;
+                continue;
+            }
+
+            if ($this->row_ById($row['Id'], '', true) === null) {
+                $new_rows[] = $row;
+                continue;
+            }
+
             if (!$this->update_Where($row, [[ 'Id', '=', $row['Id'] ]])) {
                 if ($innerTransaction)
                     $this->db->transaction_Finish(false);
@@ -764,7 +775,7 @@ class TTable
             }
         }
 
-        return true;
+        return $this->update($new_rows);
     }
 
     public function update_Where($values, $where_conditions = [])
