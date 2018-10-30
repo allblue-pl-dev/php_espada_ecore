@@ -205,7 +205,7 @@ class MDatabase extends E\Module
 		if ($date === null)
 			return null;
 
-		return strtotime($date . ' UTC');
+		return (int)strtotime($date . ' UTC');
 	}
 
 	// public function unescapeTimeDateMillis($date)
@@ -221,7 +221,7 @@ class MDatabase extends E\Module
 		if ($date_time === null)
 			return null;
 
-		return strtotime($date_time . ' UTC');
+		return (int)strtotime($date_time . ' UTC');
 	}
 
 	public function unescapeInt($value)

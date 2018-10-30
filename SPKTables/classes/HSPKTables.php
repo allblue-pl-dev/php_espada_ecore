@@ -217,11 +217,11 @@ class HSPKTables
                 if ($db_column_name === null)
                     continue;
 
-                $filter = EC\HStrings::EscapeLangCharacters($filter);
+                $filter = mb_strtolower(EC\HStrings::EscapeLangCharacters($filter));
                 $db_filter = $t_table->getDB()->escapeString("%{$filter}%");
+                $column_expression = self::GetReplace("LCASE(CAST({$db_column_name} AS CHAR))");
 
-                $conditions[] = "CAST({$db_column_name} AS CHAR)" .
-                        " LIKE {$db_filter}";
+                $conditions[] = "{$column_expression} LIKE {$db_filter}";
             }
 
             $query = '(' . implode(' OR ', $conditions) . ')';
@@ -296,6 +296,24 @@ class HSPKTables
             'offset' => $offset,
             'limit' => $limit
         ];
+    }
+
+    static private function GetReplace($column_expression)
+    {
+        $replace_from   = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż' ];
+        $replace_to     = ['a', 'c', 'e', 'l', 'n', 'o', 's', 'z', 'z' ];
+
+        $replace_from = [ 'ł' ];
+        $replace_to = [ 'l' ];
+
+        $replace = '';
+        for ($i = 0; $i < count($replace_from); $i++)
+            $replace .= "REPLACE(";
+        $replace .= "{$column_expression}";
+        for ($i = count($replace_to) - 1; $i >= 0; $i--)
+            $replace .= ", '{$replace_from[$i]}', '{$replace_to[$i]}')";
+
+        return $replace;
     }
 
 }

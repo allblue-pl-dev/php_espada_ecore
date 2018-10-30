@@ -23,8 +23,10 @@ class CReader
         $pages = $this->pdf->getPages();
         foreach ($pages as $page) {
             $page_fields = $page->getTextArray();
-            foreach ($page_fields as $field)
+            foreach ($page_fields as $field) {
+                // echo "{$field}\r\n";
                 $fields[] = $field;
+            }
         }
 
         return $fields;

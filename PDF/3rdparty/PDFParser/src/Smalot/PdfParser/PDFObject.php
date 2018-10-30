@@ -247,6 +247,7 @@ class PDFObject
     public function getText(Page $page = null)
     {
         $text                = '';
+        $position            = [];
         $sections            = $this->getSectionsText($this->content);
         $current_font = null;
 
@@ -443,7 +444,8 @@ class PDFObject
 	 */
 	public function getTextArray(Page $page = null)
 	{
-		$text                = array();
+        $text                = array();
+        $textInfo            = array();
 		$sections            = $this->getSectionsText($this->content);
 		$current_font        = new Font($this->document);
 
@@ -480,12 +482,21 @@ class PDFObject
 						if (is_null($current_font)) {
 							// Fallback
 							// TODO : Improve
-							$text[] = $command[self::COMMAND][0][self::COMMAND];
+                            $text[] = $command[self::COMMAND][0][self::COMMAND];
+                            $textInfo[] = [
+                                'text' => $command[self::COMMAND][0][self::COMMAND],
+                                'position' => $this->getTextPosition($commands),
+                            ];
 							continue;
 						}
 
-						$sub_text = $current_font->decodeText($command[self::COMMAND]);
-						$text[] = $sub_text;
+                        $sub_text = $current_font->decodeText($command[self::COMMAND]);
+
+                        $text[] = $sub_text;
+                        $textInfo[] = [
+                            'text' => $sub_text,
+                            'position' => $this->getTextPosition($commands),
+                        ];
 						break;
 
 					// set leading
@@ -521,7 +532,11 @@ class PDFObject
 							$args = preg_split('/\s/s', $command[self::COMMAND]);
 							$id   = trim(array_pop($args), '/ ');
 							if ($xobject = $page->getXObject($id)) {
-								$text[] = $xobject->getText($page);
+                                $text[] = $xobject->getText($page);
+                                $textInfo[] = [
+                                    'text' => $xobject->getText($page),
+                                    'position' => $this->getTextPosition($commands),
+                                ];
 							}
 						}
 						break;
@@ -565,7 +580,7 @@ class PDFObject
 			}
 		}
 
-		return $text;
+		return $textInfo;
 	}
 
 
@@ -783,5 +798,20 @@ class PDFObject
     protected function getUniqueId()
     {
         return spl_object_hash($this);
+    }
+
+    private function getTextPosition($commands)
+    {
+        foreach ($commands as $command) {
+            if (array_key_exists('o', $command)) {
+                if ($command['o'] === 'Td') {
+                    if (array_key_exists('c', $command)) {
+                        return explode(' ', $command['c']);
+                    }
+                }
+            }
+        }
+        
+        return null;
     }
 }

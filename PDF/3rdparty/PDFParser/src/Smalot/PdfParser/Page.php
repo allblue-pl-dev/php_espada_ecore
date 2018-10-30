@@ -231,7 +231,6 @@ class Page extends PDFObject
 	public function getTextArray(Page $page = null)
 	{
 		if ($contents = $this->get('Contents')) {
-
 			if ($contents instanceof ElementMissing) {
 				return array();
 			} elseif ($contents instanceof ElementNull) {
@@ -248,24 +247,25 @@ class Page extends PDFObject
 							$new_content .= $element->getObject()->getContent();
 						} else {
 							$new_content .= $element->getContent();
-						}
+                        }
 					}
 
-					$header   = new Header(array(), $this->document);
-					$contents = new PDFObject($this->document, $header, $new_content);
+                    $header   = new Header(array(), $this->document);
+                    $contents = new PDFObject($this->document, $header, $new_content);
 				}
 			} elseif ($contents instanceof ElementArray) {
-				// Create a virtual global content.
+                // Create a virtual global content.
 				$new_content = '';
 
 				/** @var PDFObject $content */
-          foreach ($contents->getContent() as $content) {
+                foreach ($contents->getContent() as $content) {
 					$new_content .= $content->getContent() . "\n";
 				}
 
-				$header   = new Header(array(), $this->document);
+                $header   = new Header(array(), $this->document);
 				$contents = new PDFObject($this->document, $header, $new_content);
-			}
+            }
+
 
 			return $contents->getTextArray($this);
 		}
