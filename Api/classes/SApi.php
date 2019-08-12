@@ -32,11 +32,42 @@ class SApi extends E\Site
 
         $result = $this->getResult();
 
-        $result_json = $result->getJSON();
+        if ($result instanceof CResult) {
+            $result_json = $result->getJSON();
 
-        $this->getRootL()->setFields([
-            'raw' => $result->getJSON()
-        ]);
+            $this->getRootL()->setFields([
+                'raw' => $result->getJSON()
+            ]);
+        } else if ($result instanceof CResult_Bytes) {
+            echo "ABApi" . "\r\n";
+
+            echo (int)$result->getResult() . "\r\n";
+
+            $message = $result->getMessage();
+            echo mb_strlen($message) . "\r\n";
+            echo $message . "\r\n";
+
+            if (ob_get_contents())
+			    ob_clean();
+		    flush();
+
+            foreach ($result->getBytes() as $byteInfo) {
+                echo $byteInfo['name'] . "\r\n";
+                if (!is_string($byteInfo['bytes'])) {
+                    throw new \Exception("Bytes must be string. Found: {$byteInfo['name']} ->" . 
+                            print_r($byteInfo['bytes'], true));
+                }
+
+                echo mb_strlen($byteInfo['bytes']) . "\r\n";
+                echo $byteInfo['bytes'] . "\r\n";
+
+                flush();
+            }
+
+            $this->getRootL()->setFields([
+                'raw' => ''
+            ]);
+        }
     }
 
     private function parseArgs($args)
@@ -49,14 +80,20 @@ class SApi extends E\Site
     {
         if ($this->actionName === '') {
             $uri = E\Uri::Current();
-            return CResult::Failure("Api `action` not set: `{$uri}`.");
+            return CResult_Base::Failure_Base('json', "Api `action` not set: `{$uri}`.");
         }
 
         if ($this->api === null)
-            return CResult::Failure('Unknown `api`.');
+            return CResult_Base::Failure_Base('json', 'Unknown `api`.');
+
+        $action = $this->api->getAction($this->actionName);
+        if ($action === null) {
+            return CResult_Base::Failure_Base('json', 
+                    "Action '{$this->actionName}' does not exist.");
+        }
 
         if (!E\Args::Post_ValidateSize()) {
-            return CResult::Failure('File size too big.')
+            return CResult_Base::Failure_Base($action['type'], 'File size too big.')
                 ->add('errorMessage', EC\HText::_('Api:Errors_PostSizeExceeded'));
         }
 
@@ -64,7 +101,7 @@ class SApi extends E\Site
         if (array_key_exists('json', $post_args)) {
             $api_args = json_decode($post_args['json'], true);
             if ($api_args === null)
-                return CResult::Failure('Cannot parse json.');
+                return CResult_Base::Failure_Base($action['type'], 'Cannot parse json.');
         } else
             $api_args = [];
 
@@ -74,8 +111,8 @@ class SApi extends E\Site
 
             // foreach ($post_args as $post_arg_name => $post_arg_value) {
                 if (array_key_exists($post_arg_name, $api_args)) {
-                    return CResult::Failure("Arg `{$post_arg_name}` already " .
-                            ' set in `json`.');
+                    return CResult_Base::Failure_Base($action['type'], 
+                            "Arg `{$post_arg_name}` already set in `json`.");
                 }
                 $api_args[$post_arg_name] = $post_arg_value;
             // }
@@ -91,9 +128,6 @@ class SApi extends E\Site
         }
 
         $result = $this->api->getResult($this->actionName, $api_args);
-
-        if ($result === null)
-            return CResult::Failure('Result cannot be null.');
 
         $notices = E\Notice::GetAll();
         foreach ($notices as $notice) {

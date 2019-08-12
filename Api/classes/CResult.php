@@ -3,13 +3,8 @@ defined('_ESPADA') or die(NO_ACCESS);
 
 use E, EC;
 
-class CResult
+class CResult extends CResult_Base
 {
-
-    const SUCCESS       = 0;
-    const FAILURE       = 1;
-    const ERROR         = 2;
-
 
     static public function Success($message = '')
     {
@@ -27,60 +22,38 @@ class CResult
     }
 
 
-    private function __construct($result, $message)
+    private $data = [];
+
+    public function __construct(int $result, string $message)
     {
-        $this->outputs['result'] = $result;
-        $this->outputs['message'] = $message;
+        parent::__construct($result, $message);
     }
 
     public function add($name, $value)
     {
-        $this->outputs[$name] = $value;
+        $this->data[$name] = $value;
 
         return $this;
-    }
-
-    public function debug($message)
-    {
-        if (EDEBUG) {
-            if (!array_key_exists('EDEBUG', $this->outputs))
-                $this->outputs['EDEBUG'] = [];
-
-            $this->outputs['EDEBUG'][] = $message;
-        }
-
-        return $this;
-    }
-
-    public function isSuccess()
-    {
-        return $this->outputs['result'] === self::SUCCESS;
-    }
-
-    public function isFailure()
-    {
-        return $this->outputs['result'] === self::FAILURE;
-    }
-
-    public function isError()
-    {
-        return $this->outputs['result'] === self::ERROR;
     }
 
     public function get($name)
     {
-        if (!isset($this->outputs[$name]))
+        if (!isset($this->data[$name]))
             return null;
 
-        return $this->outputs[$name];
+        return $this->data[$name];
     }
 
     public function getJSON()
     {
+        $this->data['result'] = $this->getResult();
+        $this->data['message'] = $this->getMessage();
+        $this->data['EDEBUG'] = $this->getDebug();
+
         if (EDEBUG)
-            $json_string = json_encode($this->outputs, JSON_PRETTY_PRINT);
+            $json_string = json_encode($this->data, JSON_PRETTY_PRINT);
         else
-            $json_string = json_encode($this->outputs);
+            $json_string = json_encode($this->data);
 
         if ($json_string == null) {
             throw new \Exception('Cannot parse Api\CResult `outputs`: ' .
@@ -88,11 +61,6 @@ class CResult
         }
 
         return $json_string;
-    }
-
-    public function getMessage()
-    {
-        return $this->outputs['message'];
     }
 
 }
