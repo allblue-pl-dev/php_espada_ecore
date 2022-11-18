@@ -64,7 +64,7 @@ class AApi
             //         return CResult_Bytes::Error("Result must be an instance of 'CResult_Bytes'.");
             // }
 
-            return call_user_func([ $this, $action['fn'] ], $api_args);
+            return $result;
         } catch (\Exception $e) {
             if (!EDEBUG) {
                 E\Exception::NotifyListeners($e);
